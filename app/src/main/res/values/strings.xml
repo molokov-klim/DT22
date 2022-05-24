@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">DT22</string>
+    <!--Main-->
+    <string name="logo_main">LOGO</string>
+    <string name="create_session">CREATE SESSION</string>
+    <string name="find_session_main">FIND SESSION</string>
+    <string name="settings">SETTINGS</string>
+    <string name="version">version 1.0</string>
+    <string name="bird">bird</string>
+    <string name="logo">logo</string>
+    <string name="connect_bluetooth">CONNECT BLUETOOTH</string>
+    <string name="copy_token">COPY TOKEN</string>
+    <string name="token">null</string>
+    <string name="tv_token">Token</string>
+    <string name="close_session">CLOSE SESSION</string>
+    <string name="hide">HIDE</string>
+
+
+</resources>
