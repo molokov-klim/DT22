@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class BtListActivity extends AppCompatActivity {
 
     private void init(){
         btAdapter = BluetoothAdapter.getDefaultAdapter();
+        System.out.println("LOG btAdapter "+btAdapter);
         list = new ArrayList<>();
 
         ActionBar ab = getSupportActionBar();
@@ -52,24 +54,28 @@ public class BtListActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         adapter = new BtAdapter(this, R.layout.bt_list_item, list);
         listView.setAdapter(adapter);
+
+        getPairedDevices();
     }
 
+    @SuppressLint("MissingPermission")
     private void getPairedDevices(){
+        @SuppressLint("MissingPermission")
         Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+        System.out.println("LOG pairedDevices "+pairedDevices);
 
         if(pairedDevices.size()>0){
+            System.out.println("LOG pairedDevices.size() "+pairedDevices.size());
             list.clear();
             for(BluetoothDevice device : pairedDevices){
                 ListItem item = new ListItem();
                 item.setBtName(device.getName());
                 item.setBtMac(device.getAddress());//MAC
+                System.out.println("LOG item "+item);
                 list.add(item);
             }
             adapter.notifyDataSetChanged();
-        }
-
-
-
+        }else System.out.println("LOG pairedDevices.size() "+pairedDevices.size());
     }
 
 }
