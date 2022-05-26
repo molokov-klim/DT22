@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
@@ -33,10 +34,21 @@ public class BtListActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.bt_list_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if(item.getItemId() == android.R.id.home){
             finish();
+        } else if(item.getItemId() == R.id.id_search){
+            ListItem itemTitle = new ListItem();
+            itemTitle.setItemType(BtAdapter.TITLE_ITEM_TYPE);
+            list.add(itemTitle);
+            adapter.notifyDataSetChanged();
         }
 
         return super.onOptionsItemSelected(item);
@@ -72,6 +84,8 @@ public class BtListActivity extends AppCompatActivity {
                 item.setBtName(device.getName());
                 item.setBtMac(device.getAddress());//MAC
                 System.out.println("LOG item "+item);
+                System.out.println("LOG item name "+item.getBtName());
+                System.out.println("LOG item name "+item.getBtMac());
                 list.add(item);
             }
             adapter.notifyDataSetChanged();

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">DT22</string>
-    <!--Main-->
+    <!--MainActivity-->
     <string name="logo_main">LOGO</string>
     <string name="create_session">CREATE SESSION</string>
     <string name="find_session_main">FIND SESSION</string>
@@ -14,6 +14,9 @@
     <string name="tv_token">Token</string>
     <string name="close_session">CLOSE SESSION</string>
     <string name="hide">HIDE</string>
+
+    <!-- BtListActivity -->
+    <string name="title_item_name">Найденные устройства: </string>
 
 
 </resources>

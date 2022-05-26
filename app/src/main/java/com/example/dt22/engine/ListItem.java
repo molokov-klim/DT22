@@ -3,6 +3,7 @@ package com.example.dt22.engine;
 public class ListItem {
     private String btName;
     private String btMac;
+    private String itemType = BtAdapter.DEF_ITEM_TYPE;
 
     public String getBtName() {
         return btName;
@@ -19,4 +20,35 @@ public class ListItem {
     public void setBtMac(String btMac) {
         this.btMac = btMac;
     }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
