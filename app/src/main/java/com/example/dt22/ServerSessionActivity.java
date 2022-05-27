@@ -10,13 +10,17 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dt22.engine.BtConnection;
+import com.example.dt22.engine.BtConst;
 import com.example.dt22.engine.LoopServerEngine;
 
 public class ServerSessionActivity extends AppCompatActivity {
@@ -25,6 +29,8 @@ public class ServerSessionActivity extends AppCompatActivity {
     private MenuItem menuItem;
     private BluetoothAdapter btAdapter;
     private final int ENABLE_REQUEST = 15;
+    private SharedPreferences pref;
+    private BtConnection btConnection;
 
 
 
@@ -55,6 +61,7 @@ public class ServerSessionActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    // Слушатель нажатий на кнопки меню
     @SuppressLint("MissingPermission")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -69,13 +76,17 @@ public class ServerSessionActivity extends AppCompatActivity {
         } else if(item.getItemId() == R.id.id_menu){
             if(btAdapter.isEnabled()){
             Intent i =new Intent(ServerSessionActivity.this, BtListActivity.class);
-            startActivity(i);}
-        } else {
-            Toast.makeText(this, "Включите блютуз для перехода", Toast.LENGTH_SHORT).show();
+            startActivity(i);
+            } else {
+                Toast.makeText(this, "Включите блютуз для перехода", Toast.LENGTH_SHORT).show();
+            }
+        } else if(item.getItemId() == R.id.id_connect){
+            btConnection.connect();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    // Отслеживатель сообщений от активити
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -87,6 +98,7 @@ public class ServerSessionActivity extends AppCompatActivity {
         }
     }
 
+    // Переключатель иконки
     private void setBtIcon(){
         if(btAdapter.isEnabled()){
             menuItem.setIcon(R.drawable.ic_bt_disable);
@@ -95,6 +107,7 @@ public class ServerSessionActivity extends AppCompatActivity {
         };
     }
 
+    // Закрытие сессии сервера
     public void closeSession(View view) {
         LoopServerEngine loopServerEngine = new LoopServerEngine();
         loopServerEngine.stopServerSession();
@@ -104,6 +117,7 @@ public class ServerSessionActivity extends AppCompatActivity {
         startActivity(mainActivity);
     }
 
+    // Копирование токена в буфер
     public void copyToken(View view) {
         ClipboardManager clipboard = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -115,15 +129,30 @@ public class ServerSessionActivity extends AppCompatActivity {
         System.out.println("clip "+clip);
     }
 
+    // Инициализация
     private void init(){
         btAdapter = BluetoothAdapter.getDefaultAdapter();
+        pref = getSharedPreferences(BtConst.MY_PREF, Context.MODE_PRIVATE);
+        Log.d("MyLog", "BtMac "+pref.getString(BtConst.MAC_KEY, "no bt selected"));
+        btConnection = new BtConnection(this);
     };
 
+    // Включение bluetooth
     @SuppressLint("MissingPermission")
     private void enableBt(){
         Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(i, ENABLE_REQUEST);
     };
+
+    // Нажатие на кнопку "CONNECT BLUETOOTH"
+    public void connectBluetooth(View view) {
+        if(btAdapter.isEnabled()){
+            Intent i =new Intent(ServerSessionActivity.this, BtListActivity.class);
+            startActivity(i);
+        } else {
+            Toast.makeText(this, "Включите блютуз для перехода", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
 }

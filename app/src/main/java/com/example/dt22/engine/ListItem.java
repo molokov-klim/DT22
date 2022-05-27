@@ -1,22 +1,47 @@
 package com.example.dt22.engine;
 
+import android.bluetooth.BluetoothDevice;
+
 public class ListItem {
-    private String btName;
-    private String btMac;
+    private BluetoothDevice btDevice;
+    private String itemType = BtAdapter.DEF_ITEM_TYPE;
 
-    public String getBtName() {
-        return btName;
+    public BluetoothDevice getBtDevice() {
+        return btDevice;
     }
 
-    public void setBtName(String btName) {
-        this.btName = btName;
+    public void setBtDevice(BluetoothDevice btDevice) {
+        this.btDevice = btDevice;
     }
 
-    public String getBtMac() {
-        return btMac;
+    public String getItemType() {
+        return itemType;
     }
 
-    public void setBtMac(String btMac) {
-        this.btMac = btMac;
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

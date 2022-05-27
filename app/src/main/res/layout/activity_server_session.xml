@@ -15,6 +15,7 @@
         android:layout_marginEnd="50dp"
         android:backgroundTint="#5517C3"
         android:text="@string/connect_bluetooth"
+        android:onClick="connectBluetooth"
         app:cornerRadius="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
