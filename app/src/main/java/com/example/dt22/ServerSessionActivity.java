@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class ServerSessionActivity extends AppCompatActivity {
     private final int ENABLE_REQUEST = 15;
     private SharedPreferences pref;
     private BtConnection btConnection;
+    private Button bA, bB;
 
 
 
@@ -38,7 +40,15 @@ public class ServerSessionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server_session);
+        bA = findViewById(R.id.buttonA);
+        bB = findViewById(R.id.buttonB);
         init();
+        bA.setOnClickListener(v -> {
+            btConnection.sendMessage("A");
+        });
+        bB.setOnClickListener(v -> {
+            btConnection.sendMessage("B");
+        });
 
         //Создание сессии сервера
         LoopServerEngine loopServerEngine = new LoopServerEngine();

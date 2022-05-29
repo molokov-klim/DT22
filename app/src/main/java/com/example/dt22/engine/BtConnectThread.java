@@ -4,20 +4,19 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.UUID;
 
-public class ConnectThread extends Thread {
+public class BtConnectThread extends Thread {
     private BluetoothAdapter btAdapter;
     private BluetoothSocket mSocket;
+    private BtReceiveThread rThread;
     public static final String UUID = "00001101-0000-1000-8000-00805F9B34FB"; // Идентификатор соединения (подходит для Arduino)
 
     // Конструктор потока подключения
     @SuppressLint("MissingPermission")
-    public ConnectThread(BluetoothAdapter btAdapter, BluetoothDevice device){
+    public BtConnectThread(BluetoothAdapter btAdapter, BluetoothDevice device){
         this.btAdapter = btAdapter;
         try{
                 mSocket = device.createRfcommSocketToServiceRecord(java.util.UUID.fromString(UUID));
@@ -32,7 +31,8 @@ public class ConnectThread extends Thread {
         btAdapter.cancelDiscovery();
         try{
             mSocket.connect();
-            new ReceiveThread(mSocket).start();
+           rThread = new BtReceiveThread(mSocket);
+           rThread.start();
             System.out.println("LOG Device connected");
             Log.d("MyLog", "Connected");
         } catch (IOException e){
@@ -50,6 +50,9 @@ public class ConnectThread extends Thread {
         }
     }
 
+    public BtReceiveThread getRThread() {
+        return rThread;
+    }
 }
 
 

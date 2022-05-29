@@ -18,15 +18,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.dt22.engine.BtAdapter;
-import com.example.dt22.engine.ListItem;
+import com.example.dt22.engine.BtListItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +34,7 @@ public class BtListActivity extends AppCompatActivity {
     private ListView listView;
     private BtAdapter adapter;
     private BluetoothAdapter btAdapter;
-    private List<ListItem> list;
+    private List<BtListItem> list;
     private boolean isBtPermissionGranted = false;
     private boolean isDiscovery = false;
     private ActionBar ab;
@@ -89,7 +88,7 @@ public class BtListActivity extends AppCompatActivity {
             if(isDiscovery)return true;
             ab.setTitle(R.string.discovering);
             list.clear();
-            ListItem itemTitle = new ListItem();
+            BtListItem itemTitle = new BtListItem();
             itemTitle.setItemType(BtAdapter.TITLE_ITEM_TYPE);
             list.add(itemTitle);
             adapter.notifyDataSetChanged();
@@ -123,7 +122,7 @@ public class BtListActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     private void onItemClickListener(){
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            ListItem item = (ListItem)parent.getItemAtPosition(position);
+            BtListItem item = (BtListItem)parent.getItemAtPosition(position);
             if(item.getItemType().equals(BtAdapter.DISCOVERY_ITEM_TYPE)){
                 item.getBtDevice().createBond(); //запрос на сопряжение
             }
@@ -141,7 +140,7 @@ public class BtListActivity extends AppCompatActivity {
             System.out.println("LOG pairedDevices.size() "+pairedDevices.size());
             list.clear();
             for(BluetoothDevice device : pairedDevices){
-                ListItem item = new ListItem();
+                BtListItem item = new BtListItem();
                 item.setBtDevice(device);
                 System.out.println("LOG item "+item);
                 System.out.println("LOG item name "+item.getBtDevice().getName());
@@ -155,13 +154,21 @@ public class BtListActivity extends AppCompatActivity {
     // Системная функция проверки разрешений запускается с помощью ActivityCompat.requestPermissions и может работать с ОС
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        System.out.println("grantResults "+ Arrays.toString(grantResults));
+        System.out.println("grantResults.length "+ grantResults.length);
+        System.out.println("requestCode "+requestCode);
+        System.out.println("permissions "+ Arrays.toString(permissions));
+        System.out.println("Manifest.permission.ACCESS_FINE_LOCATION "+ Manifest.permission.ACCESS_FINE_LOCATION);
+        System.out.println("PackageManager.PERMISSION_GRANTED "+ PackageManager.PERMISSION_GRANTED);
+
         if(requestCode == BT_REQUEST_PERM){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 isBtPermissionGranted = true;
                 Toast.makeText(this, "Разрешение получено", Toast.LENGTH_SHORT).show();
                 System.out.println("LOG Разрешение получено");
             } else {
                 Toast.makeText(this, "Ошибка. Нет разрешения на поиск устройств.", Toast.LENGTH_SHORT).show();
+                System.out.println("LOG Разрешение НЕ получено");
             }
         } else {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -173,6 +180,7 @@ public class BtListActivity extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, BT_REQUEST_PERM);
+            System.out.println("LOG ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, BT_REQUEST_PERM);");
         } else {
             isBtPermissionGranted = true;
         }
@@ -186,7 +194,7 @@ public class BtListActivity extends AppCompatActivity {
             System.out.println("LOG public void onReceive ");
             if(BluetoothDevice.ACTION_FOUND.equals(intent.getAction())){
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                ListItem item = new ListItem();
+                BtListItem item = new BtListItem();
                 item.setBtDevice(device);
                 item.setItemType(BtAdapter.DISCOVERY_ITEM_TYPE);
                 list.add(item);

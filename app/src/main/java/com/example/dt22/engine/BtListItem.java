@@ -2,7 +2,7 @@ package com.example.dt22.engine;
 
 import android.bluetooth.BluetoothDevice;
 
-public class ListItem {
+public class BtListItem {
     private BluetoothDevice btDevice;
     private String itemType = BtAdapter.DEF_ITEM_TYPE;
 

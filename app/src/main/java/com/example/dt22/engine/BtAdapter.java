@@ -19,17 +19,17 @@ import com.example.dt22.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BtAdapter extends ArrayAdapter<ListItem> {
+public class BtAdapter extends ArrayAdapter<BtListItem> {
     public static final String DEF_ITEM_TYPE = "normal";
     public static final String TITLE_ITEM_TYPE = "title";
     public static final String DISCOVERY_ITEM_TYPE = "discovery";
-    private List<ListItem> mainList; //список для адаптера
+    private List<BtListItem> mainList; //список для адаптера
     private List<ViewHolder> listViewHolders;
     private SharedPreferences pref;
     private boolean isDiscoveryType = false;
 
 
-    public BtAdapter(@NonNull Context context, int resource, List<ListItem> btList) {
+    public BtAdapter(@NonNull Context context, int resource, List<BtListItem> btList) {
         super(context, resource, btList);
         mainList = btList;
         listViewHolders = new ArrayList<>();

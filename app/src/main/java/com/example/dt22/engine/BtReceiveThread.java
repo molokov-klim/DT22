@@ -7,16 +7,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class ReceiveThread extends Thread {
+public class BtReceiveThread extends Thread {
     private BluetoothSocket socket;
     private InputStream inputS;
     private OutputStream outputS;
     private byte[] rBuffer;
 
-    public ReceiveThread(BluetoothSocket socket){
+    public BtReceiveThread(BluetoothSocket socket){
         this.socket = socket;
         try {
             inputS = socket.getInputStream();
+        } catch (IOException e){
+            Log.d("MyLog", "InputStream не получен");
+        }
+
+        try {
+            outputS = socket.getOutputStream();
         } catch (IOException e){
             Log.d("MyLog", "InputStream не получен");
         }
@@ -36,6 +42,15 @@ public class ReceiveThread extends Thread {
             }
         }
     }
+
+    public void sendMessage(byte[] byteArray){
+        try{
+            outputS.write(byteArray);
+        } catch (IOException e){
+
+        }
+    }
+
 }
 
 

@@ -11,7 +11,7 @@ public class BtConnection {
     private SharedPreferences pref;
     private BluetoothAdapter btAdapter;
     private BluetoothDevice device;
-    private ConnectThread connectThread;
+    private BtConnectThread btConnectThread;
 
     // Конструктор
     public BtConnection(Context context) {
@@ -29,9 +29,14 @@ public class BtConnection {
         }
         device = btAdapter.getRemoteDevice(mac);
         if(device == null) return;
-        connectThread = new ConnectThread(btAdapter, device);
-        connectThread.start();
+        btConnectThread = new BtConnectThread(btAdapter, device);
+        btConnectThread.start();
     }
+
+    public void sendMessage(String message){
+        btConnectThread.getRThread().sendMessage(message.getBytes());
+    }
+
 }
 
 
