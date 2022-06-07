@@ -1,61 +1,95 @@
 package com.example.dt22.engine;
 
 import android.annotation.SuppressLint;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Handler;
+import android.text.format.Formatter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.dt22.R;
+import com.example.dt22.ServerSessionActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Date;
 
 public class LoopServerEngine implements Runnable {
 
-    private final float FPS = 60;
-    private final float SECOND = 1000000000;
-    private final float UPDATE_TIME = SECOND/FPS;
+    ServerSocket serverSocket;
+    Socket socketServerSide;
+    DataInputStream dataInputStream;
+
+    String messageFromClient;
+    Handler handler = new Handler();
 
     private boolean runningServer = false;
 
     Thread serverSessionThread = null;
 
+
     private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
     @SuppressLint("NewApi")
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
 
-    //TEMP
-    float updates = 0;
-    float drawing = 0;
-    long timer = 0;
-    //TEMP
-
 
     @Override
     public void run() {
-        System.out.println("LoopServerFW public void run()");
-        float lastTime = System.nanoTime();
-        float delta = 0;
-        timer = System.currentTimeMillis();
+        System.out.println("LoopServerEngine public void run()");
+        System.out.println("LOG LoopServerEngine public void run()");
 
-        while(runningServer){
-            float nowTime = System.nanoTime();
-            float elapsedTime = nowTime-lastTime;
-            lastTime = nowTime;
-            delta += elapsedTime/UPDATE_TIME;
-            if(delta>1){
-                updateServerSession();
-                drawingServerSession();
-                delta--;
+        try {
+            serverSocket = new ServerSocket(9700);
+
+            System.out.println("LOG serverSocket " +serverSocket);
+            System.out.println("LOG serverSocket.getInetAddress() " +serverSocket.getInetAddress());
+            System.out.println("LOG serverSocket.getLocalPort() " +serverSocket.getLocalPort());
+            System.out.println("LOG serverSocket.getLocalSocketAddress() " +serverSocket.getLocalSocketAddress());
+
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("LOG waiting for client");
+                }
+            });
+
+            System.out.println("LOG runningServer is "+runningServer);
+
+            while(runningServer){
+                socketServerSide = serverSocket.accept();
+                dataInputStream = new DataInputStream(socketServerSide.getInputStream());
+
+                messageFromClient = dataInputStream.readUTF();
+
+                System.out.println("LOG dataInputStream "+dataInputStream);
+                System.out.println("LOG messageFromClient "+messageFromClient);
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(messageFromClient.equals("Open camera")){
+                            System.out.println("LOG Opening camera");
+                        } else if(messageFromClient.equals("Open gallery")){
+                            System.out.println("LOG Opening gallery");
+                        } else {
+                            System.out.println("LOG message from client is"+messageFromClient);
+                        }
+
+                    }
+                });
+
             }
-            if(System.currentTimeMillis()-timer>1000){
-                Date date = new Date();
-                //System.out.println("UPDATES "+updates+" DRAWING "+drawing+" DATE "+date.toString());
-                updates=0;
-                drawing=0;
-                timer+=1000;
-            }
+        } catch (IOException e){
+            e.printStackTrace();
         }
+
     }
 
     public static String generateNewToken() {
@@ -67,13 +101,6 @@ public class LoopServerEngine implements Runnable {
         return null;
     }
 
-    private void updateServerSession(){
-        updates++;
-    }
-
-    private void drawingServerSession(){
-        drawing++;
-    }
 
     public void startServerSession(){
 
@@ -89,7 +116,9 @@ public class LoopServerEngine implements Runnable {
 
         try {
             serverSessionThread.join();
-        } catch (InterruptedException e) {
+            serverSocket.close();
+            socketServerSide.close();
+        } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
 

@@ -7,8 +7,10 @@
         <entry key="app/src/main/res/drawable/ic_menu.xml" value="0.334" />
         <entry key="app/src/main/res/layout/activity_bluetooth.xml" value="0.33958333333333335" />
         <entry key="app/src/main/res/layout/activity_bt_list.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_client.xml" value="0.35260416666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_server_session.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_test.xml" value="0.35260416666666666" />
         <entry key="app/src/main/res/layout/bluetooth_list_item.xml" value="0.33958333333333335" />
         <entry key="app/src/main/res/layout/bt_list_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/bt_list_item_title.xml" value="0.33" />

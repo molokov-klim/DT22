@@ -11,7 +11,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +36,8 @@ public class ServerSessionActivity extends AppCompatActivity {
     private BtConnection btConnection;
     private Button bA, bB;
 
+    public String ipAddress;
+
 
 
     @Override
@@ -50,6 +54,14 @@ public class ServerSessionActivity extends AppCompatActivity {
             btConnection.sendMessage("B");
         });
 
+        //GET IP
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String ipAddress = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
+        System.out.println("LOG SERVER IP "+ipAddress);
+
+        TextView serverIpTextView = findViewById(R.id.pt_server_ip);
+        serverIpTextView.setText(ipAddress);
+
         //Создание сессии сервера
         LoopServerEngine loopServerEngine = new LoopServerEngine();
         loopServerEngine.startServerSession();
@@ -59,6 +71,9 @@ public class ServerSessionActivity extends AppCompatActivity {
         System.out.println("TOKEN "+TOKEN);
         TextView tokenTextView = findViewById(R.id.et_token);
         tokenTextView.setText(TOKEN);
+
+
+
     }
 
     @Override

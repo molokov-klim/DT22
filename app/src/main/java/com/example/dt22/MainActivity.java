@@ -25,6 +25,13 @@ public class MainActivity extends AppCompatActivity {
         Intent serverSession = new Intent (MainActivity.this, ServerSessionActivity.class);
         startActivity(serverSession);
     }
+
+    public void findSession(View view) {
+        System.out.println("MainActivity public void findSession(View view)");
+
+        Intent findSession = new Intent (MainActivity.this, ClientActivity.class);
+        startActivity(findSession);
+    }
 }
 
 

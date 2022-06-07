@@ -11,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="50dp"
         android:backgroundTint="#5517C3"
-        android:text="@string/connect_bluetooth"
         android:onClick="connectBluetooth"
+        android:text="@string/connect_bluetooth"
         app:cornerRadius="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -40,40 +40,40 @@
         android:hint="@string/token"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mb_connect_bluetooth"
-        app:layout_constraintVertical_bias="0.159" />
+        app:layout_constraintVertical_bias="0.049" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_copy_token"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
         android:backgroundTint="#5517C3"
-        android:text="@string/copy_token"
         android:onClick="copyToken"
+        android:text="@string/copy_token"
         app:cornerRadius="35dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_token" />
 
-       <com.google.android.material.button.MaterialButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_close_session"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
         android:backgroundTint="#5517C3"
         android:onClick="closeSession"
         android:text="@string/close_session"
         app:cornerRadius="35dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mb_copy_token" />
 
@@ -97,6 +97,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/pt_server_ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="121dp"
+        android:layout_marginBottom="156dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="server ip"
+        app:layout_constraintBottom_toTopOf="@+id/buttonB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mb_close_session" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
