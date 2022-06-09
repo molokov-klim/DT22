@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.dt22.engine.LoopServerEngine;
+import com.example.dt22.engine.LoopSessionEngine;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,14 +15,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LoopServerEngine loopServerEngine = new LoopServerEngine();
-        loopServerEngine.stopServerSession();
+        LoopSessionEngine loopSessionEngine = new LoopSessionEngine();
+        loopSessionEngine.stopSession();
     }
 
     public void createSession(View view) {
         System.out.println("MainActivity public void create_session(View view)");
 
-        Intent serverSession = new Intent (MainActivity.this, ServerSessionActivity.class);
+        Intent serverSession = new Intent (MainActivity.this, SessionActivity.class);
         startActivity(serverSession);
     }
 

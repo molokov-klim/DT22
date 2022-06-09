@@ -17,9 +17,8 @@ import java.io.PrintWriter;
 
 public class ClientActivity extends AppCompatActivity {
 
-    EditText token;
-    String ip = "188.127.239.39";
-    String messageToServer, messageFromServer;
+    private EditText token;
+    private String messageToServer, messageFromServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +45,7 @@ public class ClientActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
+                String ip = "188.127.239.39";
                 socket = new Socket(ip, 9700);
                 //dataOutputStream = new DataOutputStream(socket.getOutputStream());
                 //dataOutputStream.writeUTF(messageToServer);

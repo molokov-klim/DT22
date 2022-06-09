@@ -11,9 +11,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,26 +22,40 @@ import android.widget.Toast;
 
 import com.example.dt22.engine.BtConnection;
 import com.example.dt22.engine.BtConst;
-import com.example.dt22.engine.LoopServerEngine;
+import com.example.dt22.engine.LoopSessionEngine;
 
-public class ServerSessionActivity extends AppCompatActivity {
+public class SessionActivity extends AppCompatActivity {
 
-    public static String TOKEN;
-    private MenuItem menuItem;
     private BluetoothAdapter btAdapter;
+    private BtConnection btConnection;
+
+    public static String token;
+    private MenuItem menuItem;
     private final int ENABLE_REQUEST = 15;
     private SharedPreferences pref;
-    private BtConnection btConnection;
+
+
+
+    //TEMP
     private Button bA, bB;
-
-    public String ipAddress;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_server_session);
+        setContentView(R.layout.activity_session);
+
+        //Запрос генерации и вывод токена
+        token = LoopSessionEngine.generateNewToken();
+        TextView tokenTextView = findViewById(R.id.et_token);
+        tokenTextView.setText(token);
+
+        //Создание сессии сервера
+        LoopSessionEngine loopSessionEngine = new LoopSessionEngine();
+        loopSessionEngine.startSession();
+
+
+        //TEMP
         bA = findViewById(R.id.buttonA);
         bB = findViewById(R.id.buttonB);
         init();
@@ -53,36 +65,13 @@ public class ServerSessionActivity extends AppCompatActivity {
         bB.setOnClickListener(v -> {
             btConnection.sendMessage("B");
         });
-
-        //GET IP
-        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        String ipAddress = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
-        System.out.println("LOG SERVER IP "+ipAddress);
-
-        TextView serverIpTextView = findViewById(R.id.pt_server_ip);
-        serverIpTextView.setText(ipAddress);
-
-        //Создание сессии сервера
-        LoopServerEngine loopServerEngine = new LoopServerEngine();
-        loopServerEngine.startServerSession();
-
-        //Генерация токена
-        TOKEN = LoopServerEngine.generateNewToken();
-        System.out.println("TOKEN "+TOKEN);
-        TextView tokenTextView = findViewById(R.id.et_token);
-        tokenTextView.setText(TOKEN);
-
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         menuItem = menu.findItem(R.id.id_bt_button);
-
         setBtIcon();
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -100,7 +89,7 @@ public class ServerSessionActivity extends AppCompatActivity {
             }
         } else if(item.getItemId() == R.id.id_menu){
             if(btAdapter.isEnabled()){
-            Intent i =new Intent(ServerSessionActivity.this, BtListActivity.class);
+            Intent i =new Intent(SessionActivity.this, BtListActivity.class);
             startActivity(i);
             } else {
                 Toast.makeText(this, "Включите блютуз для перехода", Toast.LENGTH_SHORT).show();
@@ -134,11 +123,11 @@ public class ServerSessionActivity extends AppCompatActivity {
 
     // Закрытие сессии сервера
     public void closeSession(View view) {
-        LoopServerEngine loopServerEngine = new LoopServerEngine();
-        loopServerEngine.stopServerSession();
-        TOKEN = null;
+        LoopSessionEngine loopSessionEngine = new LoopSessionEngine();
+        loopSessionEngine.stopSession();
+        token = null;
 
-        Intent mainActivity = new Intent (ServerSessionActivity.this, MainActivity.class);
+        Intent mainActivity = new Intent (SessionActivity.this, MainActivity.class);
         startActivity(mainActivity);
     }
 
@@ -148,7 +137,7 @@ public class ServerSessionActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         }
-        ClipData clip = ClipData.newPlainText("TOKEN ", TOKEN);
+        ClipData clip = ClipData.newPlainText("TOKEN ", token);
         clipboard.setPrimaryClip(clip);
 
         System.out.println("clip "+clip);
@@ -172,7 +161,7 @@ public class ServerSessionActivity extends AppCompatActivity {
     // Нажатие на кнопку "CONNECT BLUETOOTH"
     public void connectBluetooth(View view) {
         if(btAdapter.isEnabled()){
-            Intent i =new Intent(ServerSessionActivity.this, BtListActivity.class);
+            Intent i =new Intent(SessionActivity.this, BtListActivity.class);
             startActivity(i);
         } else {
             Toast.makeText(this, "Включите блютуз для перехода", Toast.LENGTH_SHORT).show();

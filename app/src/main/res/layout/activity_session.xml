@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ServerSessionActivity">
+    tools:context=".SessionActivity">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_connect_bluetooth"
@@ -97,22 +97,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/pt_server_ip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="121dp"
-        android:layout_marginBottom="156dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="server ip"
-        app:layout_constraintBottom_toTopOf="@+id/buttonB"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mb_close_session" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

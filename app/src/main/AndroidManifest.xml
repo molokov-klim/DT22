@@ -29,7 +29,7 @@
             android:name=".BtListActivity"
             android:exported="false" />
         <activity
-            android:name=".ServerSessionActivity"
+            android:name=".SessionActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
