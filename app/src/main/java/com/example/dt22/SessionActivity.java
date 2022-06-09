@@ -33,6 +33,7 @@ public class SessionActivity extends AppCompatActivity {
     private MenuItem menuItem;
     private final int ENABLE_REQUEST = 15;
     private SharedPreferences pref;
+    LoopSessionEngine loopSessionEngine = new LoopSessionEngine();
 
 
 
@@ -51,7 +52,6 @@ public class SessionActivity extends AppCompatActivity {
         tokenTextView.setText(token);
 
         //Создание сессии сервера
-        LoopSessionEngine loopSessionEngine = new LoopSessionEngine();
         loopSessionEngine.startSession();
 
 
@@ -123,7 +123,6 @@ public class SessionActivity extends AppCompatActivity {
 
     // Закрытие сессии сервера
     public void closeSession(View view) {
-        LoopSessionEngine loopSessionEngine = new LoopSessionEngine();
         loopSessionEngine.stopSession();
         token = null;
 

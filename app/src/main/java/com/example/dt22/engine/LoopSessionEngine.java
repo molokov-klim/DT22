@@ -6,45 +6,77 @@ import android.os.Handler;
 
 import com.example.dt22.SessionActivity;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.security.SecureRandom;
 import java.util.Base64;
 
 public class LoopSessionEngine implements Runnable {
 
-    private Socket socket;
-    private PrintWriter output;
-    private BufferedReader input;
-    private boolean runningSession = false;
-    private final Handler handler = new Handler();
-    private Thread sessionThread = null;
+    Socket socket;
+    PrintWriter output;
+    DataInputStream input;
+    boolean runningSession = false;
+    Handler handler = new Handler();
+    Thread sessionThread = null;
+    String messageFromServer;
+    String messageToServer;
+    String ip = "188.127.239.39";
+
     private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
     @SuppressLint("NewApi")
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
 
 
+
     @Override
     public void run() {
         try {
-            String ip = "188.127.239.39";
             socket = new Socket(ip, 9700);
+
+            System.out.println("LOG sending message to server");
+            messageToServer = "startSession "+SessionActivity.token;
             output = new PrintWriter(socket.getOutputStream());
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    output.write("startSession "+ SessionActivity.token);
-                    output.flush();
-                    output.close();
-                }
-            });
+            output.write(messageToServer);
+            output.flush();
+            output.close();
+
+
+            System.out.println("LOG socket .isReachable "+socket.getInetAddress().isReachable(5000));
+
+
+            System.out.println("LOG socket is "+socket);
+            System.out.println("LOG socket.isConnected() is "+socket.isConnected());
+            System.out.println("LOG socket.isBound() is "+socket.isBound());
+            System.out.println("LOG socket.isClosed() is "+socket.isClosed());
+            System.out.println("LOG socket.isInputShutdown() is "+socket.isInputShutdown());
+            System.out.println("LOG socket.isOutputShutdown() is "+socket.isOutputShutdown());
+            System.out.println("LOG socket.getInputStream() is "+socket.getInputStream());
+            System.out.println("LOG socket.toString() is "+socket.toString());
+            System.out.println("LOG socket.getInetAddress() is "+socket.getInetAddress());
+            System.out.println("LOG socket.getChannel() is "+socket.getChannel());
+            System.out.println("LOG socket.getRemoteSocketAddress() is "+socket.getRemoteSocketAddress());
+
+
+
+
+
+
+
+
+
             while(runningSession){
-                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-                String messageFromServer = dataInputStream.readUTF();
+                input = new DataInputStream(socket.getInputStream());
+                messageFromServer = input.readUTF();
                 System.out.println("LOG messageFromServer: "+messageFromServer);
+                if(messageFromServer.equals("startSessionOK")){
+                    System.out.println("LOG startSessionOK");
+                }
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -73,8 +105,8 @@ public class LoopSessionEngine implements Runnable {
         if(!runningSession){return;}
         runningSession =false;
         try {
-            sessionThread.join();
             socket.close();
+            sessionThread.join();
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
