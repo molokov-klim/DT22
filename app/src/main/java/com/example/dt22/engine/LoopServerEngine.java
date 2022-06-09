@@ -25,12 +25,9 @@ public class LoopServerEngine implements Runnable {
     ServerSocket serverSocket;
     Socket socketServerSide;
     DataInputStream dataInputStream;
-
     String messageFromClient;
-    Handler handler = new Handler();
-
     private boolean runningServer = false;
-
+    Handler handler = new Handler();
     Thread serverSessionThread = null;
 
 
@@ -41,17 +38,9 @@ public class LoopServerEngine implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("LoopServerEngine public void run()");
-        System.out.println("LOG LoopServerEngine public void run()");
 
         try {
             serverSocket = new ServerSocket(9700);
-
-            System.out.println("LOG serverSocket " +serverSocket);
-            System.out.println("LOG serverSocket.getInetAddress() " +serverSocket.getInetAddress());
-            System.out.println("LOG serverSocket.getLocalPort() " +serverSocket.getLocalPort());
-            System.out.println("LOG serverSocket.getLocalSocketAddress() " +serverSocket.getLocalSocketAddress());
-
 
             handler.post(new Runnable() {
                 @Override
@@ -60,37 +49,17 @@ public class LoopServerEngine implements Runnable {
                 }
             });
 
-            System.out.println("LOG runningServer is "+runningServer);
-
             while(runningServer){
                 socketServerSide = serverSocket.accept();
                 dataInputStream = new DataInputStream(socketServerSide.getInputStream());
-
                 messageFromClient = dataInputStream.readUTF();
-
-                System.out.println("LOG dataInputStream "+dataInputStream);
-                System.out.println("LOG messageFromClient "+messageFromClient);
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(messageFromClient.equals("Open camera")){
-                            System.out.println("LOG Opening camera");
-                        } else if(messageFromClient.equals("Open gallery")){
-                            System.out.println("LOG Opening gallery");
-                        } else {
-                            System.out.println("LOG message from client is"+messageFromClient);
-                        }
-
-                    }
-                });
-
             }
         } catch (IOException e){
             e.printStackTrace();
         }
 
     }
+
 
     public static String generateNewToken() {
         byte[] randomBytes = new byte[24];
