@@ -4,19 +4,16 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Handler;
 
-import com.example.dt22.SessionActivity;
+import com.example.dt22.HostSessionActivity;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-public class LoopSessionEngine implements Runnable {
+public class LoopSession implements Runnable {
 
     Socket socket;
     PrintWriter output;
@@ -25,8 +22,10 @@ public class LoopSessionEngine implements Runnable {
     Handler handler = new Handler();
     Thread sessionThread = null;
     String messageFromServer;
-    String messageToServer;
+    String messageToServerStartSession;
+    String messageToServerStopSession;
     String ip = "188.127.239.39";
+    int port = 9700;
 
     private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
     @SuppressLint("NewApi")
@@ -37,14 +36,14 @@ public class LoopSessionEngine implements Runnable {
     @Override
     public void run() {
         try {
-            socket = new Socket(ip, 9700);
+            socket = new Socket(ip, port);
 
             System.out.println("LOG sending message to server");
-            messageToServer = "startSession "+SessionActivity.token;
+            messageToServerStartSession = "startSession "+ HostSessionActivity.token;
             output = new PrintWriter(socket.getOutputStream());
-            output.write(messageToServer);
+            output.write(messageToServerStartSession);
             output.flush();
-            output.close();
+            socket.shutdownOutput();
 
 
             System.out.println("LOG socket .isReachable "+socket.getInetAddress().isReachable(5000));
@@ -61,9 +60,6 @@ public class LoopSessionEngine implements Runnable {
             System.out.println("LOG socket.getInetAddress() is "+socket.getInetAddress());
             System.out.println("LOG socket.getChannel() is "+socket.getChannel());
             System.out.println("LOG socket.getRemoteSocketAddress() is "+socket.getRemoteSocketAddress());
-
-
-
 
 
 
@@ -105,6 +101,12 @@ public class LoopSessionEngine implements Runnable {
         if(!runningSession){return;}
         runningSession =false;
         try {
+            socket = new Socket(ip, port);
+            messageToServerStopSession = "stopSession "+ HostSessionActivity.token;
+            output = new PrintWriter(socket.getOutputStream());
+            output.write(messageToServerStopSession);
+            output.flush();
+            output.close();
             socket.close();
             sessionThread.join();
         } catch (InterruptedException | IOException e) {

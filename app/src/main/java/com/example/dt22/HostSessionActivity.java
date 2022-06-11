@@ -22,9 +22,9 @@ import android.widget.Toast;
 
 import com.example.dt22.engine.BtConnection;
 import com.example.dt22.engine.BtConst;
-import com.example.dt22.engine.LoopSessionEngine;
+import com.example.dt22.engine.LoopSession;
 
-public class SessionActivity extends AppCompatActivity {
+public class HostSessionActivity extends AppCompatActivity {
 
     private BluetoothAdapter btAdapter;
     private BtConnection btConnection;
@@ -33,13 +33,11 @@ public class SessionActivity extends AppCompatActivity {
     private MenuItem menuItem;
     private final int ENABLE_REQUEST = 15;
     private SharedPreferences pref;
-    LoopSessionEngine loopSessionEngine = new LoopSessionEngine();
-
-
+    LoopSession loopSession = new LoopSession();
 
     //TEMP
     private Button bA, bB;
-
+    //TEMP
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +45,12 @@ public class SessionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_session);
 
         //Запрос генерации и вывод токена
-        token = LoopSessionEngine.generateNewToken();
+        token = LoopSession.generateNewToken();
         TextView tokenTextView = findViewById(R.id.et_token);
         tokenTextView.setText(token);
 
         //Создание сессии сервера
-        loopSessionEngine.startSession();
+        loopSession.startSession();
 
 
         //TEMP
@@ -65,6 +63,7 @@ public class SessionActivity extends AppCompatActivity {
         bB.setOnClickListener(v -> {
             btConnection.sendMessage("B");
         });
+        //TEMP
     }
 
     @Override
@@ -89,7 +88,7 @@ public class SessionActivity extends AppCompatActivity {
             }
         } else if(item.getItemId() == R.id.id_menu){
             if(btAdapter.isEnabled()){
-            Intent i =new Intent(SessionActivity.this, BtListActivity.class);
+            Intent i =new Intent(HostSessionActivity.this, BtListActivity.class);
             startActivity(i);
             } else {
                 Toast.makeText(this, "Включите блютуз для перехода", Toast.LENGTH_SHORT).show();
@@ -112,21 +111,12 @@ public class SessionActivity extends AppCompatActivity {
         }
     }
 
-    // Переключатель иконки
-    private void setBtIcon(){
-        if(btAdapter.isEnabled()){
-            menuItem.setIcon(R.drawable.ic_bt_disable);
-        } else {
-            menuItem.setIcon(R.drawable.ic_bt_enable);
-        };
-    }
-
     // Закрытие сессии сервера
     public void closeSession(View view) {
-        loopSessionEngine.stopSession();
+        loopSession.stopSession();
         token = null;
 
-        Intent mainActivity = new Intent (SessionActivity.this, MainActivity.class);
+        Intent mainActivity = new Intent (HostSessionActivity.this, MainActivity.class);
         startActivity(mainActivity);
     }
 
@@ -142,13 +132,14 @@ public class SessionActivity extends AppCompatActivity {
         System.out.println("clip "+clip);
     }
 
-    // Инициализация
-    private void init(){
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-        pref = getSharedPreferences(BtConst.MY_PREF, Context.MODE_PRIVATE);
-        Log.d("MyLog", "BtMac "+pref.getString(BtConst.MAC_KEY, "no bt selected"));
-        btConnection = new BtConnection(this);
-    };
+    // Переключатель иконки
+    private void setBtIcon(){
+        if(btAdapter.isEnabled()){
+            menuItem.setIcon(R.drawable.ic_bt_disable);
+        } else {
+            menuItem.setIcon(R.drawable.ic_bt_enable);
+        };
+    }
 
     // Включение bluetooth
     @SuppressLint("MissingPermission")
@@ -160,13 +151,20 @@ public class SessionActivity extends AppCompatActivity {
     // Нажатие на кнопку "CONNECT BLUETOOTH"
     public void connectBluetooth(View view) {
         if(btAdapter.isEnabled()){
-            Intent i =new Intent(SessionActivity.this, BtListActivity.class);
+            Intent i =new Intent(HostSessionActivity.this, BtListActivity.class);
             startActivity(i);
         } else {
             Toast.makeText(this, "Включите блютуз для перехода", Toast.LENGTH_SHORT).show();
         }
     }
 
+    // Инициализация
+    private void init(){
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        pref = getSharedPreferences(BtConst.MY_PREF, Context.MODE_PRIVATE);
+        Log.d("MyLog", "BtMac "+pref.getString(BtConst.MAC_KEY, "no bt selected"));
+        btConnection = new BtConnection(this);
+    };
 
 }
 
