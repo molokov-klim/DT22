@@ -6,52 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".JoystickActivity">
 
+
     <Button
         android:id="@+id/bt_left"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="12dp"
         android:onClick="rotateLeft"
         android:text="l"
         app:layout_constraintBottom_toBottomOf="@+id/bt_down"
-        app:layout_constraintStart_toEndOf="@+id/bt_down"
-        app:layout_constraintTop_toTopOf="@+id/bt_up"
-        app:layout_constraintVertical_bias="0.481" />
+        app:layout_constraintEnd_toStartOf="@+id/bt_down"
+        app:layout_constraintTop_toTopOf="@+id/bt_down"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="UsingOnClickInXml" />
 
     <Button
         android:id="@+id/bt_down"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="28dp"
         android:onClick="rotateDown"
         android:text="d"
-        app:layout_constraintEnd_toEndOf="@+id/bt_up"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/bt_up"
-        app:layout_constraintTop_toBottomOf="@+id/bt_up" />
-
-    <Button
-        android:id="@+id/bt_up"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:onClick="rotateUp"
-        android:text="u"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.764"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.835" />
+        app:layout_constraintEnd_toEndOf="@+id/bt_up"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/bt_up"
+        tools:ignore="UsingOnClickInXml" />
 
     <Button
         android:id="@+id/bt_right"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="8dp"
         android:onClick="rotateRight"
         android:text="r"
         app:layout_constraintBottom_toBottomOf="@+id/bt_down"
-        app:layout_constraintEnd_toStartOf="@+id/bt_down"
-        app:layout_constraintTop_toTopOf="@+id/bt_up"
-        app:layout_constraintVertical_bias="0.481" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.312"
+        app:layout_constraintStart_toEndOf="@+id/bt_down"
+        app:layout_constraintTop_toTopOf="@+id/bt_down"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="UsingOnClickInXml" />
+
+    <Button
+        android:id="@+id/bt_up"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="12dp"
+        android:onClick="rotateUp"
+        android:text="u"
+        app:layout_constraintBottom_toTopOf="@+id/bt_down"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.772"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="UsingOnClickInXml,DuplicateClickableBoundsCheck" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

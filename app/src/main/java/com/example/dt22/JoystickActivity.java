@@ -3,8 +3,11 @@ package com.example.dt22;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,7 +23,9 @@ public class JoystickActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_joystick);
+
     }
+
 
     public void rotateUp(View view) {
         messageToServer = "rotate "+ClientActivity.token+" rotateUp";
@@ -60,6 +65,7 @@ public class JoystickActivity extends AppCompatActivity {
                 printWriter.write(direction);
                 printWriter.flush();
                 printWriter.close();
+                socket.close();
                 System.out.println("messageToServer: "+direction);
             } catch (IOException e){
                 e.printStackTrace();

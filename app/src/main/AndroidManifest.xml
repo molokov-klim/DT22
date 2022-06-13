@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:allowBackup="true"
@@ -29,9 +31,6 @@
             android:name=".ClientActivity"
             android:exported="false" />
         <activity
-            android:name=".TestActivity"
-            android:exported="false" />
-        <activity
             android:name=".BtListActivity"
             android:exported="false" />
         <activity
@@ -42,10 +41,12 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".WidgetService" android:enabled="true"/>
+
     </application>
 
 </manifest>

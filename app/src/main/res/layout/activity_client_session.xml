@@ -28,10 +28,8 @@
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
         android:layout_marginTop="48dp"
-        android:onClick="hideClientActivity"
         android:text="Hide"
         app:layout_constraintEnd_toEndOf="@+id/bt_disconnect"
         app:layout_constraintStart_toStartOf="@+id/bt_disconnect"
-        app:layout_constraintTop_toBottomOf="@+id/bt_disconnect"
-        tools:ignore="UsingOnClickInXml" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_disconnect" />
 </androidx.constraintlayout.widget.ConstraintLayout>
